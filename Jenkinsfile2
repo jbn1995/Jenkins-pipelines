@@ -1,5 +1,5 @@
 pipeline{
-    agent ubuntu
+    agent none
     stages{
         stage("echo a line"){
             steps{
