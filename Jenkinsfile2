@@ -1,5 +1,7 @@
-pipeline{
-    agent 'ubn'
+pipeline {
+    agent {
+        label 'ubn' 
+    }
     stages{
         stage("echo a line"){
             steps{
