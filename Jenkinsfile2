@@ -1,6 +1,9 @@
 pipeline {
     agent{
-       label 'ubn' 
+        label{
+            label 'ubn'
+            retries 2
+        }
     }
     stages{
         stage("echo a line"){
