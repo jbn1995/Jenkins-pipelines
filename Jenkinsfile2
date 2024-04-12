@@ -1,6 +1,6 @@
 pipeline {
-    agent {
-         'ubn' 
+    agent{
+       label 'ubn' 
     }
     stages{
         stage("echo a line"){
