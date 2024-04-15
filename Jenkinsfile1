@@ -1,35 +1,37 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("A"){
+     tools {
+        maven 'Maven' 
+        }
+    stages {
+        stage("Test"){
             steps{
-                echo "========executing A========"
+                // mvn test
+                sh "mvn test"
+                slackSend channel: 'youtubejenkins', message: 'Job Started'
+                
             }
             
         }
-        stage("B"){
+        stage("Build"){
             steps{
-                echo "========executing A========"
+                sh "mvn package"
+                
             }
             
         }
-        stage("C"){
+        stage("Deploy on Test"){
             steps{
-                echo "========executing A========"
+                // deploy on container -> plugin         
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9details', path: '', url: 'http://192.168.1.108:8080')], contextPath: '/app', war: '**/*.war'
             }
             
         }
-        stage("D"){
-            steps{
-                echo "========executing A========"
+        stage("Deploy on Prod"){
+             input {
+                message "Should we continue?"
+                ok "Yes we Should"
             }
-            
-        }
-        stage("E"){
-            steps{
-                echo "========executing A========"
-            }
-            
         }
     }
     post{
@@ -38,9 +40,11 @@ pipeline{
         }
         success{
             echo "========pipeline executed successfully ========"
+             slackSend channel: 'youtubejenkins', message: 'Success'
         }
         failure{
             echo "========pipeline execution failed========"
+             slackSend channel: 'youtubejenkins', message: 'Job Failed'
         }
     }
 }
